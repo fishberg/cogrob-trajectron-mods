@@ -1,0 +1,10 @@
+diff --git a/trajectron/model/mgcvae.py b/trajectron/model/mgcvae.py
+index 47d09c2..aa526fe 100644
+--- a/trajectron/model/mgcvae.py
++++ b/trajectron/model/mgcvae.py
+@@ -1139,4 +1139,4 @@ class MultimodalGenerativeCVAE(object):
+                                             num_components,
+                                             gmm_mode)
+ 
+-        return our_sampled_future
++        return our_sampled_future, self.latent.p_dist.probs

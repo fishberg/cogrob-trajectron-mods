@@ -1,0 +1,38 @@
+diff --git a/trajectron/model/trajectron.py b/trajectron/model/trajectron.py
+index 1806702..5bab234 100644
+--- a/trajectron/model/trajectron.py
++++ b/trajectron/model/trajectron.py
+@@ -141,6 +141,7 @@ class Trajectron(object):
+                 all_z_sep=False):
+ 
+         predictions_dict = {}
++        probs_dict = {}
+         for node_type in self.env.NodeType:
+             if node_type not in self.pred_state:
+                 continue
+@@ -170,7 +171,7 @@ class Trajectron(object):
+                 map = map.to(self.device)
+ 
+             # Run forward pass
+-            predictions = model.predict(inputs=x,
++            predictions,probs = model.predict(inputs=x,
+                                         inputs_st=x_st_t,
+                                         first_history_indices=first_history_index,
+                                         neighbors=neighbors_data_st,
+@@ -185,11 +186,15 @@ class Trajectron(object):
+                                         all_z_sep=all_z_sep)
+ 
+             predictions_np = predictions.cpu().detach().numpy()
++            probs_np = probs.cpu().detach().numpy()
++
+ 
+             # Assign predictions to node
+             for i, ts in enumerate(timesteps_o):
+                 if ts not in predictions_dict.keys():
+                     predictions_dict[ts] = dict()
++                    probs_dict[ts] = dict()
+                 predictions_dict[ts][nodes[i]] = np.transpose(predictions_np[:, [i]], (1, 0, 2, 3))
++                probs_dict[ts][nodes[i]] = probs_np[i]
+ 
+-        return predictions_dict
++        return predictions_dict, probs_dict

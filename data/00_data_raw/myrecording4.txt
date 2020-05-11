@@ -1,0 +1,1 @@
+Simulation Frame | Timestamp | Position | Velocity | Heading | Angular Velocity | Acceleration | Stopped at Red Light + Light ID 
